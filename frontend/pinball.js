@@ -1,33 +1,37 @@
-
 //set up canvas
+
+
+
+
+
 const canvas = document.querySelector('canvas');
-canvas.width = 800;
-canvas.height = 800;
+const c = canvas.getContext('2d'); //shortcut for canvas
+canvas.width = 300;
+canvas.height = 500;
 
-const c = canvas.getContext('2d');  //shortcut for canvas
-
-const boardPerimeter = function draw(){
-    
+function topCurve() {
     c.beginPath();
-    c.moveTo(20,0);
-    c.lineTo(20, 575);
-    c.arc(20, 775, 370, 20, 780, false);
-    c.lineTo(780, 0);
-    c.strokeStyle = 'purple';
+    c.arc(150, 150, 150, 0, Math.PI, true);
+    c.closePath();
+    c.lineWidth = 5;
     c.fillStyle = 'purple';
+    c.fill();
+    c.strokeStyle = '#550000';
     c.stroke();
-    c.fill()
-    }
+}
+     
 
 
-//cursor & mouse variables
+
+
+//cursor & mouse letiables
 let mouse = {
     x: undefined,
     y: undefined
 }
 
-window.addEventListener('mousemove', 
-    function(event) {
+window.addEventListener('mousemove',
+    function (event) {
         mouse.x = event.x;
         mouse.y = event.y;
     })
@@ -44,6 +48,17 @@ function Circle (x, y, dx, dy, radius) {
     this.vel = .50;
 
     this.draw = function() {
+        c.globalAlpha = .1;
+        c.beginPath();
+        c.moveTo(300,500);
+        c.arc(150, 150, 150, 0, Math.PI, true);
+        c.lineTo(0, 500);
+        c.closePath();
+        c.lineWidth = 5;
+        c.fillStyle = 'green';
+        c.fill();
+        c.strokeStyle = '#550000';
+        c.stroke();
         c.beginPath();
         c.arc(this.x,this.y, this.radius, 0, Math.PI * 2, false);
         c.strokeStyle = 'white';
@@ -55,11 +70,11 @@ function Circle (x, y, dx, dy, radius) {
 
     //circle behaviors
     this.update = function(dt) {
-        if (this.x + this.radius > innerWidth || this.x - this.radius < 0 ) {
+        if (this.x + this.radius > c.innerWidth || this.x - this.radius < 0 ) {
             this.dx = -this.dx;
         }
     
-        if (this.y + this.radius > innerHeight  || this.y - this.radius < 0) {
+        if (this.y + this.radius > c.innerHeight  || this.y - this.radius < 0) {
             this.dy = -this.dy
         }
 
@@ -70,7 +85,7 @@ function Circle (x, y, dx, dy, radius) {
           if  (mouse.x - this.x < 50 && mouse.x -this.x > - 50
             && mouse.y - this.y < 50 && mouse.y - this.y > - 50
             ) {
-                if (this.radius < canvas.width) {
+                if (this.radius < 20) {
                 this.radius += 1;}
             }
             
@@ -109,5 +124,5 @@ function animate() {
             circleArray[i].update(dt);
         }
     }
-
+    topCurve()
     animate();
