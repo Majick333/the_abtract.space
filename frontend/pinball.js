@@ -81,11 +81,13 @@ class Bumpers {
 }
 
 class Ball {
-    constructor(x, y, radius, velocity) {
+    
+    constructor(x, y, radius, velX, velY) {
         this.x = x; 
         this.y = y;
         this.radius = radius;   
-        this.velocity = velocity;   
+        this.velX = velX;
+        this.velY = velY; 
     }
 
     draw() {
@@ -96,25 +98,59 @@ class Ball {
         c.fill();
     }  
 
-    update() {
-        this.draw();
-        this.x = this.x + this.velocity.x;
-        this.y = this.y + this.velocity.y;
+    update(dt) {
+        this.velY += (gravity * dt);
+        this.x = this.x + this.velX;
+        this.y = this.y + this.velY;
+        this.draw();        //do draw after physics
     }
 
 }
 
 class Launcher {
-    constructor(color) {
-        this.color = color
+    constructor(x, y, width, height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;    
     }
 
     draw() {
-    c.fillStyle = this.color;
-    c.fillRect(20,300,10,250);
-    c.stroke();
+        c.fillRect(this.x, this.y, this.width, this.height);
+        c.stroke();
+        c.fillStyle = 'red';  
+        
+    }
     
+    update(dt) {
+        
+        window.addEventListener('keydown', event => {
+            if (event.key == 'ArrowDown') {
+                this.y += (5 * (dt * .1));
+                this.power += (5 * (dt * .2)) //adding power over time
+                
+            }
+
+            
+        });
+
+        window.addEventListener('keyup', event => {
+            if (event.key == 'ArrowDown') {
+                    this.y = 300;
+                }
+
+        });
+
+        this.draw();
+    }
 }
+
+class Play {
+    constructor(over, lifeCount){
+    this.over = over;
+    this.lifeCount = lifeCount;
+    }
+
     
 }
 
@@ -191,11 +227,17 @@ for (var i = 0; i <33; i++) {
         circleArray.push(new Circle(x,y,dx,dy,radius));
 }
 
-
+const gravity = 1;
 const gameboard = new GameBoard('gold');
 const bumpers = new Bumpers(20);
-const ball = new Ball(150, 400, 10,)
-const launcher = new Launcher('blue');
+const ball = new Ball(150, 200, 10, 0, 0);
+const launcher = new Launcher(280, 300, 20, 200);
+
+
+
+
+
+
 
 gameboard.draw();
 bumpers.draw();
@@ -206,19 +248,20 @@ function animate() {
     var curTime = new Date().getTime();//
     var deltaMillis = curTime - lastTS;//
     lastTS = curTime;
-    var dt = deltaMillis/1000.0;
+    let dt = deltaMillis/1000.0;
+    dt = Math.min(dt, .1);
 
     requestAnimationFrame(animate);
     c.clearRect(0, 0, canvas.width, canvas.height);
     
-    ball.draw();
+    ball.update(dt);
     gameboard.draw();
     bumpers.draw();
-    launcher.draw();
+    launcher.update(dt);
     
         for (var i = 0; i < circleArray.length; i++){
             circleArray[i].update(dt);
         }
     }
     
-    animate();
+    animate()

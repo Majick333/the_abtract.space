@@ -1,0 +1,25 @@
+{
+  "name": "pinball",
+  "version": "1.0.0",
+  "description": "javascript pinball",
+  "main": "pinball.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Majick333/the_abtract.space.git"
+  },
+  "keywords": [
+    "pinball"
+  ],
+  "author": "Ryan McCauley",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Majick333/the_abtract.space/issues"
+  },
+  "homepage": "https://github.com/Majick333/the_abtract.space#readme",
+  "dependencies": {
+    "matter-js": "^0.15.0"
+  }
+}
